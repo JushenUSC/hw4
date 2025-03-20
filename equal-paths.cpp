@@ -34,10 +34,10 @@ pair<bool,int> realEqualPaths(Node* root, int pathLengthCounter)
 	}
 
 	if (leftSubtree.second == 0) {
-		return pair<bool, int>(true, rightSubtree.second);
+		return pair<bool, int>(rightSubtree.first, rightSubtree.second);
 	} 
 	if (rightSubtree.second == 0) {
-		return pair<bool, int>(true, leftSubtree.second);
+		return pair<bool, int>(leftSubtree.first, leftSubtree.second);
 	}
 	//previous two if blocks check if there is EITHER no left or no right subtree
 
