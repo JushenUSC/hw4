@@ -508,8 +508,6 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 	if (nodeToDelete->getLeft() != nullptr && nodeToDelete->getRight() != nullptr) {
 		Node<Key,Value>* pred = predecessor(nodeToDelete);
 		nodeSwap(pred, nodeToDelete);
-		//the node we want to remove is pointed to by predecessor variable after swap
-		nodeToDelete = pred;
 	}
 	//nodeToDelete has at most one child
 	Node<Key,Value>* parent = nodeToDelete->getParent();
