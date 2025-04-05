@@ -676,7 +676,7 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 }
 
 template<typename Key, typename Value>
-std::pair<bool,int> isBalancedHelper(Node<Key,Value>* currNode) const {
+std::pair<bool,int> BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key,Value>* currNode) const {
 	if (currNode == nullptr) {
 		return std::pair<bool,int>(true, 0);
 	}
