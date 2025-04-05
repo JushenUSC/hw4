@@ -671,7 +671,8 @@ template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
-	isBalancedHelper(this->root_);
+	std::pair<bool,int> results= isBalancedHelper(this->root_);
+	return results.first;
 }
 
 template<typename Key, typename Value>
