@@ -317,6 +317,9 @@ bool BinarySearchTree<Key, Value>::iterator::operator==(
 	if (this->current_ == rhs.current_) {
 		return true;
 	}
+	else {
+		return false;
+	}
 }
 
 /**
@@ -331,6 +334,9 @@ BinarySearchTree<Key, Value>::iterator::operator!=(
     // TODO
 	if (this->current_ == rhs.current_) {
 		return false;
+	}
+	else {
+		return true;
 	}
 
 }
@@ -465,6 +471,8 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 
 	Node<Key, Value>* parent = nullptr;
 	Node<Key, Value>* current = this->root_; 
+
+	//used to find the spot where the newNode goes, and also keeps track of its parent to allow for it to be set
 	while (current != nullptr) {
 		parent = current;
 		if (keyValuePair.first == current->getKey()) {
@@ -480,11 +488,11 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 	}
 
 	Node<Key, Value>* newNode = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, parent);
-	if (parent->getKey() < keyValuePair.first) {
-		parent->setRight(newNode);
+	if (keyValuePair.first < parent->getKey()) {
+		parent->setLeft(newNode);
 	}
 	else {
-		parent->setLeft(newNode);
+		parent->setRight(newNode);
 	}
 }
 
