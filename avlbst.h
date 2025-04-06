@@ -211,9 +211,9 @@ void AVLTree<Key, Value>::insert(const std::pair<const Key, Value>& new_item)
 		if (unbalancedValue == 2) { //unbalancedNode is left heavy
 			int unbalancedNodeChildValue = unbalancedNode->getLeft()->getBalance();
 			AVLNode<Key,Value>* unbalancedNodeChild = unbalancedNode->getLeft();
-			if (unbalancedNodeChildValue > 0) { //child node is left heavy
+			if (unbalancedNodeChildValue >= 0) { //child node is left heavy
 				//perform left rotation on unbalancedNode only
-				leftRotation(unbalancedNode);
+				rightRotation(unbalancedNode);
 			}
 			else {//child node is right heavy
 				//perform left rotation on child node, then a right rotation on unbalancedNode
@@ -226,7 +226,7 @@ void AVLTree<Key, Value>::insert(const std::pair<const Key, Value>& new_item)
 			AVLNode<Key,Value>* unbalancedNodeChild = unbalancedNode->getRight();
 			if (unbalancedNodeChildValue < 0) { //child node is right heavy
 				//perform right rotation on unbalancedNode only
-				rightRotation(unbalancedNode);
+				leftRotation(unbalancedNode);
 			}
 			else {//child node is left heavy
 				//perform right rotation on child node, then a left rotation on unbalancedNode
