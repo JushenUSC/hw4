@@ -332,8 +332,7 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::remove(const Key& key)
 {
     // TODO
-	//Boilerplate from here to
-
+	//Boilerplate from here t
 	Node<Key,Value>* current = BinarySearchTree<Key,Value>::internalFind(key);
 	if (current == nullptr) {
 		return;
@@ -384,55 +383,39 @@ void AVLTree<Key, Value>::remove(const Key& key)
 	//now we need to update the balance factors of each AVLNode within the path from the parent of the deleted node to root
 	AVLNode<Key,Value>* traversalNode = static_cast<AVLNode<Key,Value>*>(parent);
 	while (traversalNode != nullptr) {
-		int leftHeight = getHeight(traversalNode->getLeft());
-		int rightHeight = getHeight(traversalNode->getRight());
-		traversalNode->setBalance(leftHeight-rightHeight);
-		traversalNode = traversalNode->getParent();
-	}
+		// Update balance factor
+        int leftHeight = getHeight(traversalNode->getLeft());
+        int rightHeight = getHeight(traversalNode->getRight());
+        int balance = leftHeight - rightHeight;
+        traversalNode->setBalance(balance);
 
-	//now we check if the tree is balanced, if it is still balanced then we are done, if not then we need to perform rotations
-	if (this->isBalanced() == true) {
-		return;
-	}
-	else {
-		//Find the unbalanced node
-		AVLNode<Key,Value>* traversalNode = static_cast<AVLNode<Key,Value>*>(parent);
-		AVLNode<Key,Value>* unbalancedNode = nullptr;
-		while (traversalNode != nullptr) {
-			if (abs(traversalNode->getBalance()) == 2) {
-				unbalancedNode = traversalNode;
-				break;
-			}
-			traversalNode = traversalNode->getParent();
-		}
+        // Check for imbalance and perform rotations
+        if (balance == 2) { // Left-heavy
+            AVLNode<Key, Value>* leftChild = traversalNode->getLeft();
+            int leftChildBalance = leftChild->getBalance();
+            if (leftChildBalance >= 0) {
+                // Left-Left case: single right rotation
+                rightRotation(traversalNode);
+            } else {
+                // Left-Right case: left rotation on child, then right rotation on node
+                leftRotation(leftChild);
+                rightRotation(traversalNode);
+            }
+        } else if (balance == -2) { // Right-heavy
+            AVLNode<Key, Value>* rightChild = traversalNode->getRight();
+            int rightChildBalance = rightChild->getBalance();
+            if (rightChildBalance <= 0) {
+                // Right-Right case: single left rotation
+                leftRotation(traversalNode);
+            } else {
+                // Right-Left case: right rotation on child, then left rotation on node
+                rightRotation(rightChild);
+                leftRotation(traversalNode);
+            }
+        }
 
-		int unbalancedValue = unbalancedNode->getBalance();
-		if (unbalancedValue == 2) { //unbalancedNode is left heavy
-			int unbalancedNodeChildValue = unbalancedNode->getLeft()->getBalance();
-			AVLNode<Key,Value>* unbalancedNodeChild = unbalancedNode->getLeft();
-			if (unbalancedNodeChildValue > 0) { //child node is left heavy
-				//perform left rotation on unbalancedNode only
-				leftRotation(unbalancedNode);
-			}
-			else {//child node is right heavy
-				//perform left rotation on child node, then a right rotation on unbalancedNode
-				leftRotation(unbalancedNodeChild);
-				rightRotation(unbalancedNode);
-			}
-		}
-		else { // equals -2, right heavy 
-			int unbalancedNodeChildValue = unbalancedNode->getRight()->getBalance();
-			AVLNode<Key,Value>* unbalancedNodeChild = unbalancedNode->getRight();
-			if (unbalancedNodeChildValue < 0) { //child node is right heavy
-				//perform right rotation on unbalancedNode only
-				rightRotation(unbalancedNode);
-			}
-			else {//child node is left heavy
-				//perform right rotation on child node, then a left rotation on unbalancedNode
-				rightRotation(unbalancedNodeChild);
-				leftRotation(unbalancedNode);
-			}
-		}
+        // Move up to the parent (rotations may have updated traversalNode’s parent)
+        traversalNode = traversalNode->getParent();
 	}
 }
 
