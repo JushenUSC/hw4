@@ -235,6 +235,8 @@ public:
     iterator find(const Key& key) const;
     Value& operator[](const Key& key);
     Value const & operator[](const Key& key) const;
+    void debugPrint() const;
+    void printInOrder (Node<Key, Value>* node) const;
 
 protected:
     // Mandatory helper functions
@@ -351,6 +353,7 @@ BinarySearchTree<Key, Value>::iterator::operator++()
 {
     // TODO
 	this->current_ = successor(this->current_);
+  return *this;
 }
 
 
@@ -474,18 +477,16 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 
 	//used to find the spot where the newNode goes, and also keeps track of its parent to allow for it to be set
 	while (current != nullptr) {
-		parent = current;
-		if (keyValuePair.first == current->getKey()) {
-			current->setValue(keyValuePair.second);
-			return;
-		}
-		else if (current->getKey() < keyValuePair.first) {
-			current = current->getRight();
-		}
-		else {
-			current = current->getLeft();
-		}
-	}
+      parent = current;
+      if (keyValuePair.first == current->getKey()) {
+          current->setValue(keyValuePair.second); // Update value if key exists
+          return;
+      } else if (keyValuePair.first < current->getKey()) {
+          current = current->getLeft();
+      } else {
+          current = current->getRight();
+      }
+  }
 
 	Node<Key, Value>* newNode = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, parent);
 	if (keyValuePair.first < parent->getKey()) {
@@ -494,6 +495,20 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 	else {
 		parent->setRight(newNode);
 	}
+}
+
+template<class Key, class Value>
+void BinarySearchTree<Key, Value>::debugPrint() const {
+    printInOrder(root_);
+}
+
+template<class Key, class Value>
+void BinarySearchTree<Key, Value>::printInOrder(Node<Key, Value>* node) const {
+    if (node != nullptr) {
+        printInOrder(node->getLeft());
+        std::cout << node->getKey() << " ";
+        printInOrder(node->getRight());
+    }
 }
 
 
@@ -593,7 +608,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::successor(Node<Key, Value>* curr
 	else {
 		Node<Key,Value>* successor = current;
 		Node<Key,Value>* parent = successor->getParent();
-		while (parent != nullptr && parent->getRight() == current) {
+		while (parent != nullptr && parent->getRight() == successor) {
 			successor = parent;
 			parent = parent->getParent();
 		}

@@ -12,6 +12,10 @@ int main(int argc, char *argv[])
     BinarySearchTree<char,int> bt;
     bt.insert(std::make_pair('a',1));
     bt.insert(std::make_pair('b',2));
+    bt.insert(std::make_pair('c',3));
+    bt.insert(std::make_pair('d',4));
+    cout << "About to print BSTTree" << endl;
+    bt.debugPrint();
 
     
     cout << "Binary Search Tree contents:" << endl;
@@ -31,6 +35,9 @@ int main(int argc, char *argv[])
     AVLTree<char,int> at;
     at.insert(std::make_pair('a',1));
     at.insert(std::make_pair('b',2));
+    at.insert(std::make_pair('c',3));
+    at.insert(std::make_pair('d',4));
+    cout << "About to print AVLTREE" << endl;
 
     cout << "\nAVLTree contents:" << endl;
     for(AVLTree<char,int>::iterator it = at.begin(); it != at.end(); ++it) {
